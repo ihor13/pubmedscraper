@@ -165,7 +165,7 @@ app.post("/", (req, res) => {
        const fs = require('fs');
        fs.writeFile('data.json', JSON.stringify(results), err => err ? console.log(err): null);
        fs.writeFile('saveddata.json', JSON.stringify(results), err => err ? console.log(err): null);
-       res.sendFile(path.join(__dirname, '/index.html'));
+       res.send('Loading information....');
        
 
      // Results are ready
@@ -178,15 +178,15 @@ app.post("/", (req, res) => {
     //  setTimeout(() => {res.sendFile(path.join(__dirname, '/index.html'));
     //  const fs = require('fs');
     //  fs.truncate('data.json', 0, err => err ? console.log(err): null)}, 10000);
-    res.sendFile(path.join(__dirname, '/index.html'));
-    fs.truncate('data.json', 0, err => err ? console.log(err): null)
+    //res.sendFile(path.join(__dirname, '/index.html'));
+    //fs.truncate('data.json', 0, err => err ? console.log(err): null)
    //res.redirect('https://pubmed.netlify.app//index.html');
 })
 //handling any errors
 .catch (function (err) {
  console.error (err);
 });
-
+res.sendFile(path.join(__dirname, '/index.html'));
 //setTimeout(() => {res.sendFile(path.join(__dirname, '/index.html'));}, 1000);
 
 // setTimeout(() => {res.redirect('/');}, 70000);
