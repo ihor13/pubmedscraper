@@ -44,7 +44,7 @@ app.post("/", (req, res) => {
   var subName = req.body.yourname;
   let n;
   puppeteer
-  .launch ()
+  .launch ({headless: true})
   .then (async browser => {
   
     //opening a new page and navigating to Reddit
