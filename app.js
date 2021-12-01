@@ -165,7 +165,7 @@ app.post("/", (req, res) => {
        const fs = require('fs');
        fs.writeFile('data.json', JSON.stringify(results), err => err ? console.log(err): null);
        fs.writeFile('saveddata.json', JSON.stringify(results), err => err ? console.log(err): null);
-      //  res.sendFile(path.join(__dirname, '/index.html'));
+       res.sendFile(path.join(__dirname, '/index.html'));
        
 
      // Results are ready
