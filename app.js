@@ -1,6 +1,7 @@
 const puppeteer = require ('puppeteer');
 const express = require("express");
 const path = require('path');
+const fs = require('fs');
 const bodyParser = require("body-parser");
 const app = express();
 
@@ -44,7 +45,7 @@ app.post("/", (req, res) => {
   var subName = req.body.yourname;
   let n;
   puppeteer
-  .launch ({headless: false})
+  .launch ()
   .then (async browser => {
   
     //opening a new page and navigating to Reddit
@@ -164,7 +165,7 @@ app.post("/", (req, res) => {
        //   console.log(res1);
        // }
        //console.log(results);
-       const fs = require('fs');
+       
        fs.writeFile('data.json', JSON.stringify(results), err => err ? console.log(err): null);
        fs.writeFile('saveddata.json', JSON.stringify(results), err => err ? console.log(err): null);
       //res.sendFile(path.join(__dirname, '/index.html'));
@@ -176,19 +177,21 @@ app.post("/", (req, res) => {
 
    await browser.close();
    //setTimeout(() => {res.send("<h1>  Loading data... </h1>");}, 1000);
-     setTimeout(() => {res.redirect("/");}, 20000);
+    // setTimeout(() => {res.redirect("/");}, 20000);
 
     //  setTimeout(() => {res.sendFile(path.join(__dirname, '/index.html'));
     //  const fs = require('fs');
     //  fs.truncate('data.json', 0, err => err ? console.log(err): null)}, 10000);
     //res.sendFile(path.join(__dirname, '/index.html'));
-    fs.truncate('data.json', 0, err => err ? console.log(err): null)
+    // fs.truncate('data.json', 0, err => err ? console.log(err): null)
    //res.redirect('https://pubmed.netlify.app//index.html');
 })
 //handling any errors
 .catch (function (err) {
  console.error (err);
-});
+})
+.then(() => {res.sendFile(path.join(__dirname, '/index.html'));})
+ fs.truncate('data.json', 0, err => err ? console.log(err): null);
 
 // setTimeout(() => {res.redirect('/');}, 70000);
 
