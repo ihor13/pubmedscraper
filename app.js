@@ -1,12 +1,12 @@
 const puppeteer = require ('puppeteer');
 const express = require("express");
 const path = require('path');
-var timeout = require('connect-timeout')
 const bodyParser = require("body-parser");
+const fs = require('fs');
 const app = express();
 
 app.listen(process.env.PORT || 3000, () => {
-  //console.log("Application started and Listening on port 3000");
+  console.log("Application started and Listening on port 3000");
 });
 
 // server css as static
@@ -19,11 +19,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //   res.redirect('/');
 // });
 
+app.use(function(req, res, next) {
+  if (req.path !== '/')
+    return res.redirect('/');
+  next();
+});
+
 app.set('views', __dirname);
 app.set('view engine', 'html');
-
-
-
 
 
 
@@ -32,7 +35,7 @@ app.get('/data.json', function (req, res) {
   readStream.pipe(res);
 })
 
-app.get("/", timeout('5s'), (req, res) => {
+app.get("/", (req, res) => {
 res.sendFile(path.join(__dirname, '/index.html'));
 });
 
@@ -41,6 +44,28 @@ res.sendFile(path.join(__dirname, '/index.html'));
 app.post("/", (req, res) => {
   var subName = req.body.yourname;
   let n;
+  scrape(subName);
+  // scrape().then(
+  //   function(value) {res.sendFile(path.join(__dirname, '/index.html'));},
+  //   function(error) {myDisplayer(error);}
+  // )
+  //res.sendFile(path.join(__dirname, '/index.html'));
+  // fs.truncate('data.json', 0, err => err ? console.log(err): null)
+  // res.redirect('/');
+// setTimeout(() => {res.redirect('/');}, 70000);
+
+// setTimeout(() => {res.redirect('/');}, 5000);
+
+});
+
+// app.get("/", function (req, res) {
+//   // Resolve the file path etc... 
+//   res.download("./index.html");
+//   const fs = require('fs');
+//   fs.truncate('data.json', 0, err => err ? console.log(err): null)
+// });
+
+async function scrape(par){
   puppeteer
   .launch ()
   .then (async browser => {
@@ -49,7 +74,7 @@ app.post("/", (req, res) => {
     const page = await browser.newPage ();
     page.setDefaultNavigationTimeout(0);
     let siteUrl = 'https://pubmed.ncbi.nlm.nih.gov/';
-    const author = subName;
+    const author = par;
     let a_array = author.split(" ");
     if(a_array.length == 1){
      await page.goto ('https://pubmed.ncbi.nlm.nih.gov/?term=icahn+'+a_array[0]+'&size=200');
@@ -150,7 +175,7 @@ app.post("/", (req, res) => {
          },author)
          // console.log(grabPosts);
          result = result.concat(grabPosts);
-         //console.log(result);
+         console.log(result);
          
          
        }
@@ -161,11 +186,10 @@ app.post("/", (req, res) => {
        // if(res1){
        //   console.log(res1);
        // }
-       //console.log(results);
-       const fs = require('fs');
+       console.log(results);
        fs.writeFile('data.json', JSON.stringify(results), err => err ? console.log(err): null);
        fs.writeFile('saveddata.json', JSON.stringify(results), err => err ? console.log(err): null);
-       res.send('Loading information....');
+      //  res.sendFile(path.join(__dirname, '/index.html'));
        
 
      // Results are ready
@@ -178,35 +202,23 @@ app.post("/", (req, res) => {
     //  setTimeout(() => {res.sendFile(path.join(__dirname, '/index.html'));
     //  const fs = require('fs');
     //  fs.truncate('data.json', 0, err => err ? console.log(err): null)}, 10000);
-    //res.sendFile(path.join(__dirname, '/index.html'));
-    //fs.truncate('data.json', 0, err => err ? console.log(err): null)
+    // fs.truncate('data.json', 0, err => err ? console.log(err): null)
    //res.redirect('https://pubmed.netlify.app//index.html');
 })
 //handling any errors
 .catch (function (err) {
  console.error (err);
-});
-res.sendFile(path.join(__dirname, '/index.html'));
-//setTimeout(() => {res.sendFile(path.join(__dirname, '/index.html'));}, 1000);
-
-// setTimeout(() => {res.redirect('/');}, 70000);
-
-// setTimeout(() => {res.redirect('/');}, 5000);
+})
+  
+}
 
 
-
-
-});
-
-
-
-
-
-
-
-
-
-
-
-
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, '/index.html'));
+  scrape().then(
+    function(value) {res.sendFile(path.join(__dirname, '/index.html'));},
+    function(error) {myDisplayer(error);}
+  )
+  fs.truncate('data.json', 0, err => err ? console.log(err): null)
+  });
 
