@@ -153,7 +153,7 @@ app.post("/", (req, res) => {
          },author)
          // console.log(grabPosts);
          result = result.concat(grabPosts);
-         console.log(result);
+         //console.log(result);
          
          
        }
