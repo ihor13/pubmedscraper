@@ -1,6 +1,7 @@
 const puppeteer = require ('puppeteer');
 const express = require("express");
 const path = require('path');
+var timeout = require('connect-timeout')
 const bodyParser = require("body-parser");
 const app = express();
 
@@ -21,10 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set('views', __dirname);
 app.set('view engine', 'html');
 
-app.use('/', (req, res, next) => {
-  req.setTimeout((4 * 60 * 1000) + 1);
-  next();
-});
+
 
 
 
@@ -34,7 +32,7 @@ app.get('/data.json', function (req, res) {
   readStream.pipe(res);
 })
 
-app.get("/", (req, res) => {
+app.get("/", timeout('5s'), (req, res) => {
 res.sendFile(path.join(__dirname, '/index.html'));
 });
 
@@ -187,6 +185,8 @@ app.post("/", (req, res) => {
 .catch (function (err) {
  console.error (err);
 });
+
+//setTimeout(() => {res.sendFile(path.join(__dirname, '/index.html'));}, 1000);
 
 // setTimeout(() => {res.redirect('/');}, 70000);
 
