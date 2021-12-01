@@ -167,7 +167,7 @@ app.post("/", (req, res) => {
        const fs = require('fs');
        fs.writeFile('data.json', JSON.stringify(results), err => err ? console.log(err): null);
        fs.writeFile('saveddata.json', JSON.stringify(results), err => err ? console.log(err): null);
-      res.sendFile(path.join(__dirname, '/index.html'));
+      //res.sendFile(path.join(__dirname, '/index.html'));
       // res.redirect('/')
        
 
@@ -176,7 +176,7 @@ app.post("/", (req, res) => {
 
    await browser.close();
    //setTimeout(() => {res.send("<h1>  Loading data... </h1>");}, 1000);
-     //setTimeout(() => {res.redirect("/");}, 10000);
+     setTimeout(() => {res.redirect("/");}, 20000);
 
     //  setTimeout(() => {res.sendFile(path.join(__dirname, '/index.html'));
     //  const fs = require('fs');
