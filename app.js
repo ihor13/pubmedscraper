@@ -165,7 +165,7 @@ app.post("/", (req, res) => {
        const fs = require('fs');
        fs.writeFile('data.json', JSON.stringify(results), err => err ? console.log(err): null);
        fs.writeFile('saveddata.json', JSON.stringify(results), err => err ? console.log(err): null);
-       res.sendFile(path.join(__dirname, '/index.html'));
+      //  res.sendFile(path.join(__dirname, '/index.html'));
        
 
      // Results are ready
@@ -178,6 +178,7 @@ app.post("/", (req, res) => {
     //  setTimeout(() => {res.sendFile(path.join(__dirname, '/index.html'));
     //  const fs = require('fs');
     //  fs.truncate('data.json', 0, err => err ? console.log(err): null)}, 10000);
+    res.sendFile(path.join(__dirname, '/index.html'));
     fs.truncate('data.json', 0, err => err ? console.log(err): null)
    //res.redirect('https://pubmed.netlify.app//index.html');
 })
