@@ -34,8 +34,8 @@ app.get('/data.json', function (req, res) {
   readStream.pipe(res);
 })
 
-app.get("/", (req, res) => {
-res.sendFile(path.join(__dirname, '/index.html'));
+app.get("/index.html", (req, res) => {
+  res.sendFile(path.join(__dirname, '/index.html'));
 });
 
 
@@ -167,7 +167,8 @@ app.post("/", (req, res) => {
        const fs = require('fs');
        fs.writeFile('data.json', JSON.stringify(results), err => err ? console.log(err): null);
        fs.writeFile('saveddata.json', JSON.stringify(results), err => err ? console.log(err): null);
-      res.sendFile(path.join(__dirname, '/index.html'));
+      // res.sendFile(path.join(__dirname, '/index.html'));
+      res.redirect('/')
        
 
      // Results are ready
