@@ -44,7 +44,7 @@ app.post("/", (req, res) => {
   var subName = req.body.yourname;
   let n;
   puppeteer
-  .launch ({headless: true})
+  .launch ({headless: false})
   .then (async browser => {
   
     //opening a new page and navigating to Reddit
@@ -167,8 +167,8 @@ app.post("/", (req, res) => {
        const fs = require('fs');
        fs.writeFile('data.json', JSON.stringify(results), err => err ? console.log(err): null);
        fs.writeFile('saveddata.json', JSON.stringify(results), err => err ? console.log(err): null);
-      // res.sendFile(path.join(__dirname, '/index.html'));
-      res.redirect('/')
+      res.sendFile(path.join(__dirname, '/index.html'));
+      // res.redirect('/')
        
 
      // Results are ready
