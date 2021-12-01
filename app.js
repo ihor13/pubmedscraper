@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const app = express();
 
 app.listen(process.env.PORT || 3000, () => {
-  console.log("Application started and Listening on port 3000");
+  //console.log("Application started and Listening on port 3000");
 });
 
 // server css as static
@@ -20,6 +20,23 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.set('views', __dirname);
 app.set('view engine', 'html');
+
+app.use('/', (req, res, next) => {
+  req.setTimeout((4 * 60 * 1000) + 1);
+  next();
+});
+
+
+
+
+app.get('/data.json', function (req, res) {
+  var readStream = fs.createReadStream('./data.json');
+  readStream.pipe(res);
+})
+
+app.get("/", (req, res) => {
+res.sendFile(path.join(__dirname, '/index.html'));
+});
 
 
 
@@ -135,7 +152,7 @@ app.post("/", (req, res) => {
          },author)
          // console.log(grabPosts);
          result = result.concat(grabPosts);
-         console.log(result);
+         //console.log(result);
          
          
        }
@@ -146,7 +163,7 @@ app.post("/", (req, res) => {
        // if(res1){
        //   console.log(res1);
        // }
-       console.log(results);
+       //console.log(results);
        const fs = require('fs');
        fs.writeFile('data.json', JSON.stringify(results), err => err ? console.log(err): null);
        fs.writeFile('saveddata.json', JSON.stringify(results), err => err ? console.log(err): null);
@@ -184,14 +201,7 @@ app.post("/", (req, res) => {
 
 
 
-app.get('/data.json', function (req, res) {
-    var readStream = fs.createReadStream('./data.json');
-    readStream.pipe(res);
-  })
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, '/index.html'));
-});
 
 
 
