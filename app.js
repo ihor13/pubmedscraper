@@ -83,7 +83,7 @@ const extendTimeoutMiddleware = (req, res, next) => {
   next();
 };
 
-//app.use(extendTimeoutMiddleware);
+app.use(extendTimeoutMiddleware);
 
 
 
@@ -112,6 +112,7 @@ app.post("/", (req, res) => {
     args: [
         "--incognito",
         "--no-sandbox",
+        "--disable-setuid-sandbox",
         "--single-process",
         "--no-zygote"
     ],
