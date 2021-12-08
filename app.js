@@ -22,10 +22,72 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set('views', __dirname);
 app.set('view engine', 'html');
 
-app.use('/', (req, res, next) => {
-  req.setTimeout((4 * 60 * 1000) + 1);
+// app.use('/', (req, res, next) => {
+//   req.setTimeout((4 * 60 * 1000) + 1);
+//   next();
+// });
+
+
+
+
+
+const extendTimeoutMiddleware = (req, res, next) => {
+  const space = ' ';
+  let isFinished = false;
+  let isDataSent = false;
+
+  // Only extend the timeout for API requests
+  if (!req.url.includes('/api')) {
+    next();
+    return;
+  }
+
+  res.once('finish', () => {
+    isFinished = true;
+  });
+
+  res.once('end', () => {
+    isFinished = true;
+  });
+
+  res.once('close', () => {
+    isFinished = true;
+  });
+
+  res.on('data', (data) => {
+    // Look for something other than our blank space to indicate that real
+    // data is now being sent back to the client.
+    if (data !== space) {
+      isDataSent = true;
+    }
+  });
+
+  const waitAndSend = () => {
+    setTimeout(() => {
+      // If the response hasn't finished and hasn't sent any data back....
+      if (!isFinished && !isDataSent) {
+        // Need to write the status code/headers if they haven't been sent yet.
+        if (!res.headersSent) {
+          res.writeHead(202);
+        }
+
+        res.write(space);
+
+        // Wait another 15 seconds
+        waitAndSend();
+      }
+    }, 15000);
+  };
+
+  waitAndSend();
   next();
-});
+};
+
+//app.use(extendTimeoutMiddleware);
+
+
+
+
 
 
 
@@ -44,8 +106,18 @@ app.get("/index.html", (req, res) => {
 app.post("/", (req, res) => {
   var subName = req.body.yourname;
   let n;
+  const chromeOptions = {
+    headless: true,
+    defaultViewport: null,
+    args: [
+        "--incognito",
+        "--no-sandbox",
+        "--single-process",
+        "--no-zygote"
+    ],
+};
   puppeteer
-  .launch ()
+  .launch (chromeOptions)
   .then (async browser => {
   
     //opening a new page and navigating to Reddit
@@ -190,8 +262,9 @@ app.post("/", (req, res) => {
 .catch (function (err) {
  console.error (err);
 })
-.then(() => {res.sendFile(path.join(__dirname, '/index.html'));})
- fs.truncate('data.json', 0, err => err ? console.log(err): null);
+.then(() => {res.sendFile(path.join(__dirname, '/index.html'));
+setTimeout(() => {fs.truncate('data.json', 0, err => err ? console.log(err): null);}, 1000);})
+ 
 
 // setTimeout(() => {res.redirect('/');}, 70000);
 
