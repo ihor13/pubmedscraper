@@ -8,6 +8,26 @@
   href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script>
+    $(document).ready(function() {
+    const lockModal = $("#lock-modal");
+    const loadingCircle = $("#loading-circle");
+    const form = $("#my-form");
+  
+  
+    form.on('submit', function(e) {
+  
+  
+      // lock down the form
+      lockModal.css("display", "block");
+      loadingCircle.css("display", "block");
+  
+   
+  
+    });
+  })
+  
+  </script>
   <title>Icahn authors</title>
 </head>
 <body>
@@ -16,37 +36,11 @@
     <input type="text" name="yourname" placeholder="Enter full name of author" required>
     <input class="subscribe-button" type="submit" value="Search">
   </form>
-  <div id="lock-modal"></div>
-  <div id="loading-circle"></div>
 </div>
+<div id="lock-modal"></div>
+<div id="loading-circle"></div>
 
 
-<script>
-  $(document).ready(function() {
-  const lockModal = $("#lock-modal");
-  const loadingCircle = $("#loading-circle");
-  const form = $("#my-form");
-
-
-  form.on('submit', function(e) {
-
-
-    // lock down the form
-    lockModal.css("display", "block");
-    loadingCircle.css("display", "block");
-
-
-
-      // re-enable the form
-      lockModal.css("display", "none");
-      loadingCircle.css("display", "none");
-
- 
-
-  });
-})
-
-</script>
 
 
 <script>
