@@ -36,10 +36,10 @@ body,
   padding: 0;
 }
 
-body {
+/* body {
   background-image: url("network.gif");
   background-color: #eee;
-}
+} */
 
 .node {
   cursor: pointer;
